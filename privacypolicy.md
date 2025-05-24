@@ -1,6 +1,6 @@
 ## 📄 Privacy Policy for Missouri CDBG Environmental Compliance API
 
-**Effective Date:** \5/24/25
+**Effective Date:** 5/24/25
 
 ### 1. Overview
 
@@ -57,5 +57,5 @@ This Privacy Policy may be updated if the project evolves to include interactive
 
 For questions about this Privacy Policy or the project:
 
-* Contact: \rwestwood14@gmail.com
+* Contact: rwestwood14@gmail.com
 * GitHub: [https://github.com/ryan-westwood/cdbg-compliance-api](https://github.com/ryan-westwood/cdbg-compliance-api)
