@@ -1,0 +1,103 @@
+openapi: 3.1.0
+info:
+  title: Missouri CDBG Environmental Compliance API
+  version: 1.0.0
+  description: |
+    Provides tools for determining NEPA review levels, generating ERR checklists, and preparing Section 106 submissions for the Missouri DED CDBG State Non-Entitlement Program.
+servers:
+  - url: https://your-api-host.com  # placeholder, won't be used by GPT
+paths:
+  /environmental-review-level:
+    post:
+      operationId: determineReviewLevel
+      summary: Determine required NEPA environmental review level.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectType:
+                  type: string
+                projectScope:
+                  type: string
+                federalFundsUsed:
+                  type: boolean
+      responses:
+        '200':
+          description: Review level determined
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reviewLevel:
+                    type: string
+                    enum: [Exempt, CENST, CEST, EA, EIS]
+
+  /err-checklist:
+    post:
+      operationId: generateErrChecklist
+      summary: Generate customized ERR checklist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectType:
+                  type: string
+                fundingSources:
+                  type: array
+                  items:
+                    type: string
+                activities:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Checklist generated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  checklistItems:
+                    type: array
+                    items:
+                      type: string
+
+  /section-106-requirements:
+    post:
+      operationId: getSection106Requirements
+      summary: Get Missouri SHPO Section 106 consultation requirements.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectLocation:
+                  type: string
+                propertyAge:
+                  type: integer
+                groundDisturbance:
+                  type: boolean
+      responses:
+        '200':
+          description: SHPO consultation guidance
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documentsRequired:
+                    type: array
+                    items:
+                      type: string
+                  submissionInstructions:
+                    type: string
