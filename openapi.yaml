@@ -1,11 +1,11 @@
 openapi: 3.1.0
 info:
   title: Missouri CDBG Environmental Compliance API
-  version: 1.0.0
+  version: 1.1.0
   description: |
-    Provides tools for determining NEPA review levels, generating ERR checklists, and preparing Section 106 submissions for the Missouri DED CDBG State Non-Entitlement Program.
+    Tools for environmental review compliance with Missouri DED's CDBG State Non-Entitlement Program.
 servers:
-  - url: https://your-api-host.com  # placeholder, won't be used by GPT
+  - url: https://ryan-westwood.github.io/cdbg-compliance-api
 paths:
   /environmental-review-level:
     post:
@@ -101,3 +101,131 @@ paths:
                       type: string
                   submissionInstructions:
                     type: string
+
+  /public-notice:
+    post:
+      operationId: generatePublicNotice
+      summary: Generate a public notice for FONSI, NOI/RROF, or Combined.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                noticeType:
+                  type: string
+                  enum: [FONSI, NOI_RROF, Combined]
+                projectName:
+                  type: string
+                contactInfo:
+                  type: object
+                  properties:
+                    name:
+                      type: string
+                    phone:
+                      type: string
+                    email:
+                      type: string
+                commentDeadline:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: Public notice text
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  noticeText:
+                    type: string
+
+  /comment-deadline:
+    post:
+      operationId: calculateCommentDeadline
+      summary: Calculate public comment deadline based on publish date.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                publicationDate:
+                  type: string
+                  format: date
+                commentPeriodDays:
+                  type: integer
+                  default: 15
+      responses:
+        '200':
+          description: Comment deadline calculated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  commentDeadline:
+                    type: string
+                    format: date
+
+  /review-status:
+    post:
+      operationId: updateReviewStatus
+      summary: Update and return the current environmental review status.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                projectId:
+                  type: string
+                statusUpdate:
+                  type: string
+                nextStep:
+                  type: string
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currentStatus:
+                    type: string
+                  nextRequiredAction:
+                    type: string
+
+  /validate-err:
+    post:
+      operationId: validateErrCompleteness
+      summary: Validate ERR completeness from checklist.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                completedItems:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: ERR validation result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  missingItems:
+                    type: array
+                    items:
+                      type: string
+                  isComplete:
+                    type: boolean
